@@ -71,11 +71,50 @@ WHERE category IS NULL OR customer_id IS NULL OR cogs IS NULL
    OR price_per_unit IS NULL OR total_sale IS NULL;
 ```
 
-*   **Thống kê tổng quan ban đầu**:
-    *   Đếm số lượng khách hàng duy nhất (`customer_id`).
-    *   Đếm số danh mục sản phẩm duy nhất (`category`).
+**Thống kê mô tả tổng quan (Descriptive Statistics) cho các biến số**:
+  
+| Metric | Value |
+|---|---:|
+|Min Age | 18 |
+| Max Age | 64 |
+| Avg Age | 41.35 |
+| Min Quantity | 1 |
+| Max Quantity | 4 |
+| Avg Quantity | 2.51 |
+| Min Sale | 25 |
+| Max Sale | 2,000 |
+| Avg Sale | 456.54 |
 
----
+**Xác định biên thời gian của dữ liệu (Data Timeline)**
+
+| start_date |	end_date |	total_days_of_data|
+|---|---|---:|
+|2022-01-01	|2023-12-31|	729|
+
+**Thống kê số lượng và tỷ lệ % giao dịch theo giới tính**
+| Gender | Transaction Count | Percentage |
+|---|---:|---:|
+| Female | 1,017 | 50.93% |
+| Male | 980 | 49.07% |
+
+**Thống kê hiệu quả tài chính sơ bộ (Initial Profitability)**
+
+| Metric | Value |
+|---|---:|
+| Total Sales | 911,720.00 |
+| Total Cost | 189,762.70 |
+| Profit | 721,957.30 |
+| Profit Margin | 79.19% |
+
+**Kiểm tra tính toàn vẹn logic của dữ liệu (Data Integrity Check) - True**
+
+```sql
+SELECT COUNT(*) AS anomalous_rows
+FROM retail_sales
+WHERE ABS(total_sale - (quantity * price_per_unit)) > 0.01;
+```
+
+---    
 
 ## 📊 Giải quyết các bài toán kinh doanh bằng SQL
 
