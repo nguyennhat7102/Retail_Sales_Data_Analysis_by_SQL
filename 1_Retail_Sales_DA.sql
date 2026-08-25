@@ -82,6 +82,51 @@ select
 from
 	retail_sales; 
 
+
+-- 1. Thống kê mô tả tổng quan (Descriptive Statistics) cho các biến số
+SELECT 
+    MIN(age) AS min_age,
+    MAX(age) AS max_age,
+    ROUND(AVG(age), 2) AS avg_age,
+    MIN(quantity) AS min_quantity,
+    MAX(quantity) AS max_quantity,
+    ROUND(AVG(quantity), 2) AS avg_quantity,
+    MIN(total_sale) AS min_sale,
+    MAX(total_sale) AS max_sale,
+    ROUND(AVG(total_sale)::numeric, 2) AS avg_sale
+FROM retail_sales;
+
+-- 2. Xác định biên thời gian của dữ liệu (Data Timeline)
+SELECT 
+    MIN(sale_date) AS start_date, 
+    MAX(sale_date) AS end_date,
+    (MAX(sale_date) - MIN(sale_date)) AS total_days_of_data
+FROM retail_sales;
+
+-- 3. Thống kê số lượng và tỷ lệ % giao dịch theo giới tính
+SELECT 
+    gender, 
+    COUNT(*) AS transaction_count,
+    ROUND((COUNT(*)::numeric / (SELECT COUNT(*) FROM retail_sales) * 100), 2) AS percentage
+FROM retail_sales
+GROUP BY gender;
+
+-- 4. Thống kê hiệu quả tài chính sơ bộ (Initial Profitability)
+-- Tính toán tổng lợi nhuận gộp và tỷ suất lợi nhuận gộp ban đầu
+SELECT 
+    SUM(total_sale) AS total_revenue,
+    SUM(cogs) AS total_cogs,
+    (SUM(total_sale) - SUM(cogs)) AS total_gross_profit,
+    ROUND(((SUM(total_sale) - SUM(cogs)) / SUM(total_sale) * 100)::numeric, 2) AS gross_profit_margin_pct
+FROM retail_sales;
+
+-- 5. Kiểm tra tính toàn vẹn logic của dữ liệu (Data Integrity Check)	
+SELECT COUNT(*) AS anomalous_rows
+FROM retail_sales
+WHERE ABS(total_sale - (quantity * price_per_unit)) > 0.01;
+
+
+
 -- Data Analysis | Business key problems | Answers
 
  -- My Analysis & Findings
@@ -237,7 +282,3 @@ SELECT
     COUNT(*) as total_orders    
 FROM hourly_sale
 GROUP BY shift
-	
-	
-	
-	
